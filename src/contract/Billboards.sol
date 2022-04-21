@@ -90,14 +90,14 @@ contract  TheBillboard {
         );
     }
       function removeBillboard(uint _index) external {
-	        require(msg.sender == billboards[_index].owner, "Only creator can delete billboard");
+	        require(msg.sender == billboards[_index].owner, "Only owner can delete billboard");
 	        delete(billboards[_index]);
 	    }
 
 
 // this function is used to change image url
           function refurbish_Billboardurl(uint _index, string memory _url) public {
-        require(msg.sender == billboards[_index].owner, "Only creator can change image");
+        require(msg.sender == billboards[_index].owner, "Only  owner can change image");
         billboards[_index].url = _url;
 
           }
