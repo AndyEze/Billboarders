@@ -95,13 +95,18 @@ contract  TheBillboard {
 	    }
 
 
+// this function is used to change image url
+          function refurbish_Billboardurl(uint _index, string memory _url) public {
+        require(msg.sender == billboards[_index].owner, "Only creator can change image");
+        billboards[_index].url = _url;
 
+          }
 
 
      
 
      
-// this function is used to rent Billboard
+// this function is used to buy Billboard
     function buyBillboard(uint _index) public payable  {
         require(
           IERC20Token(cUsdTokenAddress).TransferFrom(
