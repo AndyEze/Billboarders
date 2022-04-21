@@ -97,7 +97,7 @@ contract  TheBillboard {
 
 // this function is used to change image url
           function refurbish_Billboardurl(uint _index, string memory _url) public {
-        require(msg.sender == billboards[_index].owner, "Only  owner can change image");
+        require(msg.sender == billboards[_index].owner, "Only  owne can change image");
         billboards[_index].url = _url;
 
           }
