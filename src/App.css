@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&family=Montserrat:wght@100&family=Ubuntu:wght@300&display=swap');
+.top{
+  color: red;
+}
+.navbar-brand{
+  text-decoration: overline;
+  font-family:"Lucida Handwriting";
+  font-stretch: expanded;
+  font-size: 2rem;
+}
+.h2{
+  text-decoration: inherit;
+}
+.row{
+  padding-top: 1.438rem;
+}
+.bot{
+  position: relative;
+  left: 35.625rem;
+  top: 1.438rem;
+}
+.texttt{
+  font-family: papyrus;
+  font-weight: bold;
+}
