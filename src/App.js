@@ -55,7 +55,8 @@ function App() {
         console.log(error);
       }
     } else {
-      alert("Error Occurred");
+     console.log("Error Occurred");
+     
     }
   };
 
