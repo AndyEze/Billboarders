@@ -1,36 +1,22 @@
-import './App.css';
+import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
 import { useState, useEffect, useCallback } from "react";
-
-
 
 import Web3 from "web3";
 import { newKitFromWeb3 } from "@celo/contractkit";
 import BigNumber from "bignumber.js";
 import IERC from "./contract/IERC.abi.json";
-import TheBillboard from  './contract/TheBillboard.abi.json';
-import Billboards from './components/Billboards';
-import Newbillboards from './components/Newbillboards';
- 
- 
- 
- 
-
-
-
+import TheBillboard from "./contract/TheBillboard.abi.json";
+import Billboards from "./components/Billboards";
+import Newbillboards from "./components/Newbillboards";
 
 const ERC20_DECIMALS = 18;
 
-
-const contractAddress = "0x4D24aEB95e20f56547276fb0954A0C70fF4EC541";
+const contractAddress = "0x5293E48E730EE40c6c75910483eE21B1E9F2e0c0";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
-
-
-
 function App() {
-
   const [contract, setcontract] = useState(null);
   const [address, setAddress] = useState(null);
   const [kit, setKit] = useState(null);
@@ -55,12 +41,11 @@ function App() {
         console.log(error);
       }
     } else {
-     console.log("Error Occurred");
-     
+      console.log("Error Occurred");
     }
   };
 
-  const getBalance = (async () => {
+  const getBalance = async () => {
     try {
       const balance = await kit.getTotalBalance(address);
       const USDBalance = balance.cUSD.shiftedBy(-ERC20_DECIMALS).toFixed(2);
@@ -70,16 +55,17 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-  });
+  };
 
-  
-  const getBillboard = (async () => {
-    const billboardsLength = await contract.methods.getbillboardsLength().call();
-    const _billboardo = []
+  const getBillboard = async () => {
+    const billboardsLength = await contract.methods
+      .getbillboardsLength()
+      .call();
+    const _billboardo = [];
     for (let index = 0; index < billboardsLength; index++) {
       console.log(billboardsLength);
       let _billboards = new Promise(async (resolve, reject) => {
-      let billboard = await contract.methods.getBillboard(index).call();
+        let billboard = await contract.methods.getBillboard(index).call();
 
         resolve({
           index: index,
@@ -88,10 +74,8 @@ function App() {
           location: billboard[2],
           description: billboard[3],
           size: billboard[4],
-         price: billboard[5],
-           sold: billboard[6]
-         
-             
+          price: billboard[5],
+          sold: billboard[6],
         });
       });
       _billboardo.push(_billboards);
@@ -99,23 +83,15 @@ function App() {
 
     const billboards = await Promise.all(_billboardo);
     setBillboards(billboards);
-    console.log(billboards)
-  });
+    console.log(billboards);
+  };
 
-  const addBillboard = async (
-    _url,
-    _location,
-    _description,
-    _size,
-    price
-  ) => {
-
-    const _price = new BigNumber(price).shiftedBy(ERC20_DECIMALS).toString();
+  const addBillboard = async (_url, _location, _description, _size, price) => {
     try {
       await contract.methods
-        .addBillboard(_url, _location, _description, _size, _price)
+        .addBillboard(_url, _location, _description, _size, price)
         .send({ from: address });
-       getBillboard();
+      getBillboard();
     } catch (error) {
       console.log(error);
     }
@@ -128,56 +104,53 @@ function App() {
       getBalance();
     } catch (error) {
       alert(error);
-    }};
+    }
+  };
 
-     
-    const buyBillboard = async (_index,) => {
-      try {
-        const cUSDContract = new kit.web3.eth.Contract(IERC, cUSDContractAddress);
-      
-        
-        await cUSDContract.methods
-          .approve(contractAddress, billboards[_index].price)
-          .send({ from: address });
-        await contract.methods.buyBillboard(_index).send({ from: address });
-        getBillboard();
-        getBalance();
-      } catch (error) {
-        console.log(error)
-      }};
+  const buyBillboard = async (_index) => {
+    try {
+      const cUSDContract = new kit.web3.eth.Contract(IERC, cUSDContractAddress);
+      const _price = new BigNumber(billboards[_index].price)
+        .shiftedBy(ERC20_DECIMALS)
+        .toString();
 
+      await cUSDContract.methods
+        .approve(contractAddress, _price)
+        .send({ from: address });
+      await contract.methods.buyBillboard(_index).send({ from: address });
+      getBillboard();
+      getBalance();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    useEffect(() => {
-      connectToWallet();
-    }, []);
-  
-    useEffect(() => {
-      if (kit && address) {
-        getBalance();
-       
-      }
-    }, [kit, address]);
-  
-    useEffect(() => {
-      if (contract) {
-        getBillboard();
-      }
-    }, [contract]);  
+  useEffect(() => {
+    connectToWallet();
+  }, []);
 
-    return (
-      <div>
-        <Navbar balance = {cUSDBalance} />
-        <Billboards billboards ={billboards}
-        buyBillboard = {buyBillboard}
-        removeBillboard= {removeBillboard}
-         
-        />
-         <Newbillboards addBillboard = {addBillboard}
-         
-/>
-      </div>
-      )
+  useEffect(() => {
+    if (kit && address) {
+      getBalance();
+    }
+  }, [kit, address]);
 
+  useEffect(() => {
+    if (contract) {
+      getBillboard();
+    }
+  }, [contract]);
 
+  return (
+    <div>
+      <Navbar balance={cUSDBalance} />
+      <Billboards
+        billboards={billboards}
+        buyBillboard={buyBillboard}
+        removeBillboard={removeBillboard}
+      />
+      <Newbillboards addBillboard={addBillboard} />
+    </div>
+  );
 }
 export default App;

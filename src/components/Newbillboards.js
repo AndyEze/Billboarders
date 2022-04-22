@@ -27,9 +27,6 @@ const Newbillboards = (props) => {
   setSize('')
   setPrice('')
   
-  
-
-   
 };
 
 return (
