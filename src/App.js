@@ -23,7 +23,7 @@ import Newbillboards from './components/Newbillboards';
 const ERC20_DECIMALS = 18;
 
 
-const contractAddress = "0x8DF51D110C7229EE75c952e93f1c197760890a39";
+const contractAddress = "0x394b52D5E9BeDDE0354f0d0A38F662F5088Ec0F8";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
 
