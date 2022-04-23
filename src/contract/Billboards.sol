@@ -117,7 +117,7 @@ contract  TheBillboard {
 
           }
 
-// this function is used to rent Billboard
+// this function is used to buy Billboard
     function buyBillboard(uint _index) public payable  {
         require(
           IERC20Token(cUsdTokenAddress).transferFrom(
